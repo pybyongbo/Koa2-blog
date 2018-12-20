@@ -62,7 +62,7 @@ header .unlogin {
 .user_name {
   font-size: 20px;
 }
-.search {
+.search form {
   position: relative;
 }
 .fl {
@@ -76,12 +76,19 @@ header .unlogin {
   left: 10px;
   top: 6px;
   font-size: 14px;
-  padding: 13px 5px;
+  /* padding: 13px 5px; */
   background: none;
   border: none;
+  border-right:1px solid #dedede;
   z-index: 10;
   outline: none;
-}
+ appearance:none;   
+      -moz-appearance:none;   
+      -webkit-appearance:none; 
+  background: url("http://ourjs.github.io/static/2015/arrow.png") no-repeat right center transparent;   
+      padding-right: 20px;   
+    }   
+
 .search input {
   height: 20px;
   padding: 5px 10px;

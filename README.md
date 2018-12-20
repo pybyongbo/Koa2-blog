@@ -1,6 +1,6 @@
 # Koa2-blog（有问题可以加 qq 群:725165362）
 
-node+koa2+mysql (欢迎 star)
+nodejs+koa2+mysql (欢迎 star)
 
 > 现在最新的代码有变动，请参照最新的代码，新增了上传头像、分页、markdown 语法等
 

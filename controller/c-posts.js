@@ -90,31 +90,41 @@ exports.getSinglePosts = async ctx => {
     count,
     res,
     pageOne;
-  await userModel.findDataById(postId).then(result => {
-    res = result;
-  });
-  await userModel.updatePostPv(postId);
-  await userModel.findCommentByPage(1, postId).then(result => {
-    pageOne = result;
-  });
-  await userModel.findCommentCountById(postId).then(result => {
-    count = result[0].count;
-  });
+  //地址栏输入非法请求做限制~(例如不存在的id,非法数字等.)
+  var resultLen = (await userModel.findDataById(postId)).length;
+  // console.log(await userModel.findDataById(postId));
+  if (resultLen != 0) {
+    await userModel.findDataById(postId).then(result => {
+      res = result;
+    });
+    await userModel.updatePostPv(postId);
+    await userModel.findCommentByPage(1, postId).then(result => {
+      pageOne = result;
+    });
+    await userModel.findCommentCountById(postId).then(result => {
+      count = result[0].count;
+    });
 
-  await userModel.findpostsDataprevnextById(postId).then(result => {
-    linkres = result;
-  });
+    await userModel.findpostsDataprevnextById(postId).then(result => {
+      linkres = result;
+    });
 
-  await ctx.render("sPost", {
-    url: ctx.url,
-    session: ctx.session,
-    posts: res[0],
-    commentLength: count,
-    commentPageLength: Math.ceil(count / 10),
-    pageOne: pageOne,
-    prevlink: linkres[0].id > postId ? "" : linkres[0],
-    nextlink: linkres[0].id > postId ? linkres[0] : linkres[1]
-  });
+    await ctx.render("sPost", {
+      url: ctx.url,
+      session: ctx.session,
+      posts: res[0],
+      commentLength: count,
+      commentPageLength: Math.ceil(count / 10),
+      pageOne: pageOne,
+      prevlink: linkres[0].id > postId ? "" : linkres[0],
+      nextlink: linkres[0].id > postId ? linkres[0] : linkres[1]
+    });
+  } else {
+    ctx.body = {
+      code: 500,
+      message: "没有查询到相关信息"
+    };
+  }
 };
 /**
  * 发表文章页面

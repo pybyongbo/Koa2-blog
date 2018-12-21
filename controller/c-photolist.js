@@ -136,19 +136,28 @@ exports.postPhotoupload = async ctx => {
 
 exports.getSinglePhoto = async ctx => {
   let photoId = ctx.params.photoId;
-  await userModel.findphotoDataById(photoId).then(result => {
-    res = result;
-  });
 
-  await userModel.findphotoDataprevnextById(photoId).then(result => {
-    linkres = result;
-  });
-  await ctx.render("photoDetail", {
-    url: ctx.url,
-    session: ctx.session,
-    posts: res[0],
-    // linkres: linkres
-    prevlink: linkres[0].id > photoId ? "" : linkres[0],
-    nextlink: linkres[0].id > photoId ? linkres[0] : linkres[1]
-  });
+  //地址栏输入非法请求做限制~(例如不存在的id,非法数字等.)
+  var resultLen = (await userModel.findphotoDataById(photoId)).length;
+  if (resultLen != 0) {
+    await userModel.findphotoDataById(photoId).then(result => {
+      res = result;
+    });
+
+    await userModel.findphotoDataprevnextById(photoId).then(result => {
+      linkres = result;
+    });
+    await ctx.render("photoDetail", {
+      url: ctx.url,
+      session: ctx.session,
+      posts: res[0],
+      prevlink: linkres[0].id > photoId ? "" : linkres[0],
+      nextlink: linkres[0].id > photoId ? linkres[0] : linkres[1]
+    });
+  } else {
+    ctx.body = {
+      code: 500,
+      message: "没有查询到相关信息"
+    };
+  }
 };

@@ -28,10 +28,9 @@
             type: "GET",
             cache: false,
             success: function (msg) {
-                // console.log(msg.code);
                 $("#verify").val(msg.code.toLowerCase());
                 $(".code").attr({src:msg.img})
-            }
+                }
             })
 
         }
@@ -44,7 +43,6 @@
             if ($('input[name=name]').val().trim() == '' || $('input[name=password]').val().trim() == '' ) {
                 fade('请输入用户名或密码')
             }else if($('input[name=code]').val().trim()!== $("#verify").val()){
-                console.log($('input[name=code]').val().trim());
                 fade('验证码不正确')
             }
             else{

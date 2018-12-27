@@ -1,6 +1,7 @@
 <%- include("header",{type:'all'}) %>
 
     <div class="container">
+    <h1><%- session.user %></h1>
     <% if(posts.length > 0 ){  %>
         <ul class="posts">
             <% posts.forEach(function(res){ %>

@@ -67,7 +67,13 @@
                             <option value="article" selected = "selected">文章</option>
                             <option value="users">会员</option>
                         </select>
+                        <% if(keywords ){ %>
+                        <input type="text" name="keywords" value="<%- keywords %>" id="search-input">
+                        <% } else { %>
+
                         <input type="text" name="keywords" value="" id="search-input">
+                        <% } %>
+                       
                         <button type="submit" class="s-btn">搜索</button>
                     </form>
                 </div>
@@ -105,7 +111,6 @@
                     <% }else{ %>
                         <a href="/create">发表文章</a>
                     <% }%>
-                    
                     <span class="signout">退出</span>
                 </div>
             <% } %>

@@ -1069,3 +1069,15 @@ a.prev {
 a.next {
   float: right;
 }
+
+.forgetpass {
+  float: left;
+
+  margin-left: 20px;
+  margin-top: 23px;
+  line-height: 35px;
+}
+
+.forgetpass a {
+  color: red;
+}

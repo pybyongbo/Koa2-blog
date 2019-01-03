@@ -84,6 +84,7 @@ slp.init({
   container: '#page',
   maxShowBtnCount: 3,
   onPageChange: state => {
+      console.log(getUrlParam('keywords'));
     console.log('pagination change:', state.pageNumber)
        // 当前页
           $.ajax({
@@ -92,7 +93,7 @@ slp.init({
               data:{
                   page: state.pageNumber,
                   searchType:getUrlParam('type'),
-                  keywords:getUrlParam('keywords')
+                  keywords:$("#search-input").val()
               },
               cache: false,
               success: function (msg) {
@@ -107,7 +108,6 @@ slp.init({
                                   '<a href=\"/posts/'+ val.id +'\">'+
                                       '<div class=\"title\">'+
                                           '<h2>'+val.title+'</h2>' +
-
                                           '<div class="others">'+
                                               '<i class="name">'+val.name+'</i>'+
                                               '<i class="name date">'+val.moment+'</i>'+

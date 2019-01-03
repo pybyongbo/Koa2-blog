@@ -16,7 +16,8 @@ exports.getRedirectPosts = async ctx => {
 exports.getPosts = async ctx => {
   let res,
     postCount,
-    name = decodeURIComponent(ctx.request.querystring.split("=")[1]);
+    keywords = ctx.query.keywords || "";
+  name = decodeURIComponent(ctx.request.querystring.split("=")[1]);
   if (ctx.request.querystring) {
     await userModel.findPostCountByName(name).then(result => {
       postCount = result[0].count;
@@ -27,6 +28,7 @@ exports.getPosts = async ctx => {
     await ctx.render("selfPosts", {
       session: ctx.session,
       url: ctx.url,
+      keywords: keywords,
       posts: res,
       postsPageLength: Math.ceil(postCount / 10)
     });
@@ -40,6 +42,7 @@ exports.getPosts = async ctx => {
     await ctx.render("posts", {
       session: ctx.session,
       url: ctx.url,
+      keywords: keywords,
       posts: res,
       postsLength: postCount,
       postsPageLength: Math.ceil(postCount / 10)
@@ -92,7 +95,6 @@ exports.getSinglePosts = async ctx => {
     pageOne;
   //地址栏输入非法请求做限制~(例如不存在的id,非法数字等.)
   var resultLen = (await userModel.findDataById(postId)).length;
-  // console.log(await userModel.findDataById(postId));
   if (resultLen != 0) {
     await userModel.findDataById(postId).then(result => {
       res = result;
@@ -187,7 +189,7 @@ exports.getSearch = async ctx => {
     postCount = result[0].count;
   });
   await await userModel
-    .findPostBykeywordsPage(searchType, decodeURIComponent(keywords), page)
+    .findPostBykeywordsPage(searchType, keywords, page)
     .then(result => {
       // res = result
       result.forEach(function(item) {

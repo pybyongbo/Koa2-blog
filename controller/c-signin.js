@@ -2,17 +2,13 @@ const userModel = require("../lib/mysql.js");
 const md5 = require("md5");
 const checkNotLogin = require("../middlewares/check.js").checkNotLogin;
 const checkLogin = require("../middlewares/check.js").checkLogin;
-
+var send = require("../lib/mail-test");
 var http = require("http");
 var fs = require("fs");
 var BMP24 = require("gd-bmp").BMP24;
-// var captchapng = require('captchapng');
-
-// const ccap = require("ccap")();
 
 exports.getSignin = async ctx => {
   await checkNotLogin(ctx);
-
   await ctx.render("signin", {
     url: ctx.url,
     session: ctx.session
@@ -21,8 +17,6 @@ exports.getSignin = async ctx => {
 exports.postSignin = async ctx => {
   console.log(ctx.request.body);
   let { name, password } = ctx.request.body;
-  console.log(ctx.cookies.get("captcha"));
-
   await userModel
     .findDataByName(name)
     .then(result => {
@@ -124,4 +118,59 @@ exports.getCaptchas = async (ctx, next) => {
   // })
 
   // return img.getFileData();
+};
+
+// getforgetPass
+exports.getforgetPass = async ctx => {
+  await ctx.render("forgetpass", {
+    url: ctx.url,
+    session: ctx.session
+  });
+};
+
+// forgetPassword
+exports.postforgetPass = async ctx => {
+  //先查找注册该条邮箱的用户密码信息
+  let { name, email, password, repeatpass, code } = ctx.request.body;
+  let userpass = "";
+  await userModel.resetpasswordByuEmail(name, email, password).then(res => {
+    // userpass = result;
+    if (res.affectedRows == 1) {
+      ctx.body = {
+        code: 0,
+        message: "操作成功"
+      };
+    } else {
+      ctx.body = {
+        code: 1,
+        message: "操作失败"
+      };
+    }
+  });
+
+  //接收到提交的邮箱,发送邮件,设置新密码.
+  /*
+    // 创建一个邮件对象
+    var mail = {
+      // 发件人
+      from: "永不言败<727697810@qq.com>",
+      // 主题
+      subject: "忘记密码重置密码操作",
+      // 收件人
+      to: email,
+      // 邮件内容，HTML格式
+      html:
+        "您的新密码为:<b style='color:red'>" +
+        Math.random()
+          .toString()
+          .slice(-6) +
+        "</b>,请牢记!"
+    };
+    send(mail);
+  */
+
+  // await ctx.render("forgetpass", {
+  //   url: ctx.url,
+  //   session: ctx.session
+  // });
 };

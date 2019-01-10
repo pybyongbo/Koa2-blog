@@ -43,7 +43,7 @@
         $('.submit').click(function(){
             if ($('input[name=name]').val().trim() == '' || $('input[name=password]').val().trim() == '' ) {
                 fade('请输入用户名或密码')
-            }else if($('input[name=code]').val().trim()!== $("#verify").val()){
+            }else if(!($('input[name=code]').val().trim()!== $("#verify").val() || $('input[name=code]').val().trim()!== $("#verify").val().toUpperCase())){
                 fade('验证码不正确')
             }
             else{

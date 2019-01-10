@@ -173,7 +173,6 @@ exports.getUseractive = async ctx => {
   await checkNotLogin(ctx);
 
   let verify = ctx.url.split("=")[1] || "";
-
   await ctx.render("active_account", {
     title: "注册成功,账号激活",
     url: ctx.url,
